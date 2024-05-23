@@ -48,6 +48,8 @@
 .chatEmptyStateSubtitle {
     font-weight: 600;
     margin-bottom: 10px;
+    font-size: 18px;
+    text-align: center;
 }
 
 @media only screen and (max-height: 780px) {

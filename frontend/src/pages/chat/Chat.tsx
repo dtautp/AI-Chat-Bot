@@ -135,7 +135,9 @@ const Chat = () => {
                     {!lastQuestionRef.current ? (
                         <div className={styles.chatEmptyState}>
                             <div className={styles.chatEmptyState}>
-                                <h2 className={styles.chatEmptyStateSubtitle}>Soy tu asistente, preguntame lo que quieras.</h2>
+                                <h2 className={styles.chatEmptyStateSubtitle}>
+                                    ¡Hola! Soy tu Asistente Virtual para el curso de Fundamentos de Contabilidad y Finanzas. <br />¿En qué puedo ayudarte?
+                                </h2>
                                 {/*<ExampleList onExampleClicked={onExampleClicked} />*/}
                             </div>
                         </div>
@@ -179,7 +181,7 @@ const Chat = () => {
                     )}
 
                     <div className={styles.chatInput}>
-                        <QuestionInput clearOnSend placeholder="Ingresa tu pregunta aqui" disabled={isLoading} onSend={question => makeApiRequest(question)} />
+                        <QuestionInput clearOnSend placeholder="Ingresa tu pregunta aquí" disabled={isLoading} onSend={question => makeApiRequest(question)} />
                         <div className={styles.chatLogoUTP}>
                             <img src="src\pages\chat\utp_logo_negro.png" alt="Logo UTP" />
                         </div>

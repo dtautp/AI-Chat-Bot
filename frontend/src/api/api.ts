@@ -31,8 +31,8 @@ export async function askApi(options: AskRequest): Promise<AskResponse> {
 }
 
 export async function chatApi(options: ChatRequest): Promise<AskResponse> {
-    const response = await fetch("https://saltoeusutpback01dev.azurewebsites.net/chat", {
-    // const response = await fetch("/chat", {
+    // const response = await fetch("https://saltoeusutpback01dev.azurewebsites.net/chat", {
+    const response = await fetch("/chat", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
