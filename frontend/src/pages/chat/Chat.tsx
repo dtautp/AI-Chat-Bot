@@ -183,7 +183,7 @@ const Chat = () => {
                     <div className={styles.chatInput}>
                         <QuestionInput clearOnSend placeholder="Ingresa tu pregunta aquí" disabled={isLoading} onSend={question => makeApiRequest(question)} />
                         <div className={styles.chatLogoUTP}>
-                            <img src="src\pages\chat\utp_logo_negro.png" alt="Logo UTP" />
+                            <img src="/src/pages/chat/utp_logo_negro.png" alt="Logo UTP" />
                         </div>
                     </div>
                     

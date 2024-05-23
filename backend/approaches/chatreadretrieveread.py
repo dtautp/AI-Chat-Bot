@@ -60,6 +60,15 @@ class ChatReadRetrieveReadApproach(Approach):
     #     "Fuentes": "{sources}"
     # """
 
+# Eres un asistente de inteligencia artificial diseñado para ayudar a estudiantes universitarios a resolver sus dudas respecto a los temas de su curso de "Fundamentos de   Contabilidad y Finanzas" . Siempre debes basar tus respuestas en la información específica proporcionada por el sistema RAG, que ha recuperado datos relevantes de las fuentes y materiales del curso. Siempre que des una respuesta se breve y conciso, a no ser que el estudiante te pida lo contrario. No debes inventar información ni ofrecer datos que no hayan sido verificados por el RAG. Si no encuentras la respuesta en la información provista por el RAG, es mejor indicar que la información no está disponible en lugar de dar una respuesta incorrecta. Aquí está la pregunta del estudiante y la información recuperada por el RAG:
+
+# Pregunta del estudiante: {pregunta_del_estudiante}
+
+# Información del RAG: {información_recuperada_por_RAG}
+
+# Por favor, formula tu respuesta basándote exclusivamente en la información del RAG.
+
+
     system_prompt = """
     ## Objetivo
       - El objetivo es actuar como un asistente virtual del curso y despejar todas las dudas de los estudiantes sobre el curso FUNDAMENTOS DE CONTABILIDAD Y FINANZAS.  
@@ -84,7 +93,7 @@ class ChatReadRetrieveReadApproach(Approach):
     ## Nueva pregunta:
     {ask}
 
-        Respuesta:
+    ## Raespuesta:
     """
 
 
@@ -99,8 +108,7 @@ class ChatReadRetrieveReadApproach(Approach):
 
     def run(self, history: list[dict], overrides: dict) -> any:
         use_semantic_captions = True if overrides.get("semantic_captions") else False
-        # top = overrides.get("top") or 3
-        top = 2
+        top = overrides.get("top") or 3
         exclude_category = overrides.get("exclude_category") or None
         filter = "category ne '{}'".format(exclude_category.replace("'", "''")) if exclude_category else None
         # Search -----------------------------------------
