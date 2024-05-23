@@ -140,7 +140,7 @@ class ChatReadRetrieveReadApproach(Approach):
                 messages=prompt,
                 temperature=overrides.get("temperature") or 0.7, 
                 # temperature=1, 
-                max_tokens=500,
+                max_tokens=2000,
                 # max_tokens=256,
             )
         
