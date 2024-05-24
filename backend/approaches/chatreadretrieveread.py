@@ -4,7 +4,6 @@ from azure.search.documents import SearchClient
 from azure.search.documents.models import QueryType
 from approaches.approach import Approach
 from text import nonewlines
-import pandas as pd
 from datetime import datetime
 
 AZURE_SEARCH_INDEX = os.getenv ("AZURE_SEARCH_INDEX")
