@@ -4,12 +4,11 @@ import time
 import logging
 import openai
 import pymongo
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from azure.core.credentials import AzureKeyCredential
 from azure.search.documents import SearchClient
 from approaches.chatreadretrieveread import ChatReadRetrieveReadApproach
-# , generate_responses_from_csv
 from approaches.chat import get_answer
 
 load_dotenv()
@@ -76,7 +75,6 @@ def chat():
         # Busca en search y responde, RAG simple
         approach = request.json["approach"]
         impl = chat_approaches.get(approach)
-
         if not impl:
             return jsonify({"error": "unknown approach"}), 400
         r = impl.run(request.json["history"], request.json.get("overrides") or {})
@@ -86,37 +84,6 @@ def chat():
         logging.exception("Exception in /chat")
         return jsonify({"error": str(e)}), 500
 
-
-# @app.route('/generate-responses', methods=['POST'])
-# def generate_responses():
-#     # Redireccionar a la plantilla hola.html que está en la carpeta templates
-#     return render_template('hola.html')
-
-# @app.route('/generate-responses', methods=['POST'])
-# def generate_responses():
-
-#     open('/data/hola.txt', 'a').close()
-
-#     try:
-#         # Especifica la ruta completa del archivo CSV
-#         csv_file_path = '/data/preguntas.csv'
-
-#         # Genera las respuestas utilizando los parámetros de la clase ChatReadRetrieveReadApproach
-#         approach = chat_approaches.get("rrr")  # Obtiene la instancia de la clase ChatReadRetrieveReadApproach
-#         generate_responses_from_csv(csv_file_path, 
-#                                     approach.search_client, 
-#                                     approach.chatgpt_deployment, 
-#                                     approach.gpt_deployment, 
-#                                     approach.sourcepage_field, 
-#                                     approach.content_field)
-
-#         # Envía una respuesta exitosa
-#         return jsonify({"message": "Responses generated successfully", "file": csv_file_path})
-#     except Exception as e:
-#         # Maneja cualquier excepción y envía una respuesta de error
-#         logging.exception("Exception in /generate-responses")
-#         return jsonify({"error": str(e)}), 500
-
 if __name__ == "__main__":
     app.run(debug=True)
-    # app.run()
+    #app.run()

@@ -3,6 +3,7 @@ import { Checkbox, Panel, DefaultButton, TextField, SpinButton } from "@fluentui
 import { SparkleFilled } from "@fluentui/react-icons";
 
 import styles from "./Chat.module.css";
+import utpImage from '../../img/utp_logo_negro.png';
 
 import { chatApi, Approaches, AskResponse, ChatRequest, ChatTurn } from "../../api";
 import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
@@ -136,7 +137,8 @@ const Chat = () => {
                         <div className={styles.chatEmptyState}>
                             <div className={styles.chatEmptyState}>
                                 <h2 className={styles.chatEmptyStateSubtitle}>
-                                    ¡Hola! Soy tu Asistente Virtual para el curso de Fundamentos de Contabilidad y Finanzas. <br />¿En qué puedo ayudarte?
+                                    ¡Hola! Soy tu Asistente Virtual para el curso de Fundamentos de Contabilidad y Finanzas. <br/> 
+                                    En qué puedo ayudarte?
                                 </h2>
                                 {/*<ExampleList onExampleClicked={onExampleClicked} />*/}
                             </div>
@@ -183,7 +185,7 @@ const Chat = () => {
                     <div className={styles.chatInput}>
                         <QuestionInput clearOnSend placeholder="Ingresa tu pregunta aquí" disabled={isLoading} onSend={question => makeApiRequest(question)} />
                         <div className={styles.chatLogoUTP}>
-                            <img src="/src/pages/chat/utp_logo_negro.png" alt="Logo UTP" />
+                            <img src={utpImage} alt="Logo UTP" />
                         </div>
                     </div>
                     
