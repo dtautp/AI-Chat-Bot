@@ -5,7 +5,7 @@
 }
 
 .header {
-    /* background-color: #B7E4FF; */
+    background-color: #B7E4FF;
     background-color: #cbdfff;
     /* color: #121212; */
     position: fixed;
@@ -36,7 +36,6 @@
 .headerTitle {
     margin-left: 12px;
     color: #121212;
-    /* color: white; */
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
