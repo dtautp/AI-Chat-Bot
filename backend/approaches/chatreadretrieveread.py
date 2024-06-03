@@ -6,9 +6,12 @@ from approaches.approach import Approach
 from text import nonewlines
 import pandas as pd
 from datetime import datetime
+import firebase_module
+import time
 
 AZURE_SEARCH_INDEX = os.getenv ("AZURE_SEARCH_INDEX")
 AZURE_OPENAI_MAX_CONTENT = os.getenv ("AZURE_OPENAI_MAX_CONTENT") or 4500
+
 
 fecha_actual = datetime.now()
 fecha_formateada = fecha_actual.strftime("%d/%m/%Y %H:%M:%S")
@@ -18,47 +21,6 @@ fecha_formateada = fecha_actual.strftime("%d/%m/%Y %H:%M:%S")
 # top documents from search, then constructs a prompt with them, and then uses OpenAI to generate an completion 
 # (answer) with that prompt.
 class ChatReadRetrieveReadApproach(Approach):
-    # system_prompt = """
-    # ## Task Goal
-    #     - The goal is to act as a course assistant and clear all doubts for students about the FUNDAMENTALS OF ACCOUNTING AND FINANCE course.
-
-    # ## Task Constructions
-    #     - You will be given a list of SOURCES that you will need to use to ANSWER a QUESTION.
-    #     - You must use the SOURCES to create an ANSWER to the QUESTION.
-    #     - You must not use any other SOURCES.
-    #     - Always include the SOURCE name for each fact in the response, referencing its full path with square brackets, e.g., [info1.txt].
-    #     - Answer in the same language as the question. Avoid adding the word 'ANSWER' in the output, and format the response as a direct reply to the query.
-    #     - In each answer, write a brief summary and structure the answer for better understanding, use bullets, separators or any list organizer if you think necessary.
-    #     - Do not repeat information that you have already given previously.
-    #     - Answer in a precise and summarized way for a student.
-    #     - Responds to dates with a "dd - M, yyyy" format.
-        
-    # ## Task Input:
-    #     "HISTORY": "{history}"
-    #     "QUESTION": "{ask}"
-    #     "SOURCES": "{sources}"
-
-    # ## Task Output:
-    # """
-
-    # system_prompt = """
-    # ## Objetivo
-    #     - El objetivo es actuar como un asistente virtual del curso y despejar todas las dudas de los estudiantes sobre el curso FUNDAMENTOS DE CONTABILIDAD Y FINANZAS.
-
-    # ## Instrucciones
-    #     - Se le dará una lista de FUENTES que deberá utilizar para RESPONDER BREVEMENTE a la PREGUNTA.
-    #     - Debes utilizar las FUENTES para crear una RESPUESTA a la PREGUNTA.
-    #     - No debes utilizar ninguna otras FUENTES.
-    #     - Responder en el mismo idioma de la pregunta. Evite agregar la palabra 'RESPUESTA' en el resultado y formatee la respuesta como una respuesta directa a la consulta.
-    #     - En cada respuesta, escribe un BREVE RESUMEN y ORGANIZA la respuesta para una mejor comprensión utiliza viñetas, guiones o tablas si lo crees necesario.
-    #     - No repetir información que ya hayas dado anteriormente.
-    #     - Si las FUENTES tienen fechas, tomar en cuenta que las fechas se encuentran formateadas como "%d/%m/%Y".
-
-    # ## Entrada:
-    #     "Historial": "{history}"
-    #     "Pregunta": "{ask}"
-    #     "Fuentes": "{sources}"
-    # """
 
 # Eres un asistente de inteligencia artificial diseñado para ayudar a estudiantes universitarios a resolver sus dudas respecto a los temas de su curso de "Fundamentos de   Contabilidad y Finanzas" . Siempre debes basar tus respuestas en la información específica proporcionada por el sistema RAG, que ha recuperado datos relevantes de las fuentes y materiales del curso. Siempre que des una respuesta se breve y conciso, a no ser que el estudiante te pida lo contrario. No debes inventar información ni ofrecer datos que no hayan sido verificados por el RAG. Si no encuentras la respuesta en la información provista por el RAG, es mejor indicar que la información no está disponible en lugar de dar una respuesta incorrecta. Aquí está la pregunta del estudiante y la información recuperada por el RAG:
 
@@ -68,33 +30,10 @@ class ChatReadRetrieveReadApproach(Approach):
 
 # Por favor, formula tu respuesta basándote exclusivamente en la información del RAG.
 
-
-    system_prompt = """
-    ## Objetivo
-      - El objetivo es actuar como un asistente virtual del curso y despejar todas las dudas de los estudiantes sobre el curso FUNDAMENTOS DE CONTABILIDAD Y FINANZAS.  
-    
-    ## Instrucciones
-        - Utilice toda la información del contexto y el historial de conversación para responder una nueva pregunta. 
-        - Si ve la respuesta en el historial de conversación anterior o en el contexto. Responda aclarando la información fuente. Si no lo ves en el contexto o en el historial de chat, simplemente di tú No encontré la respuesta en los datos proporcionados. No inventes cosas.
-        - Se le dará una lista de FUENTES que deberá utilizar para RESPONDER BREVEMENTE a la PREGUNTA.
-        - Debes utilizar las FUENTES para crear una RESPUESTA a la PREGUNTA.
-        - No debes utilizar ninguna otras FUENTES.
-        - Responder en el mismo idioma de la pregunta. Evite agregar la palabra 'RESPUESTA' en el resultado y formatee la respuesta como una respuesta directa a la consulta.
-        - En cada respuesta, escribe un BREVE RESUMEN y ORGANIZA la respuesta para una mejor comprensión utiliza viñetas, guiones o tablas si lo crees necesario.
-        - No repetir información que ya hayas dado anteriormente.
-        - Si las FUENTES tienen fechas, tomar en cuenta que las fechas se encuentran formateadas como "%d/%m/%Y".
-
-    ## Historial de conversaciones anteriores del interlocutor. "Humano" fue el usuario que hizo la nueva pregunta. "Asistente" eras tú como asistente:
-    {history}
-        
-    ## Resultado de la búsqueda vectorial de la nueva pregunta:
-    {sources}
-
-    ## Nueva pregunta:
-    {ask}
-
-    ## Raespuesta:
-    """
+    KNOWLEDGE_BASE_VERSION = 'v2'
+    SYSTEM_PROMPT_ID = 2
+    system_prompt = firebase_module.select_system_prompt_by_id(SYSTEM_PROMPT_ID)
+    prompt_content = system_prompt['prompt_content']
 
 
     def __init__(self, search_client: SearchClient, chatgpt_deployment: str, gpt_deployment: str, sourcepage_field: str, content_field: str):
@@ -119,22 +58,25 @@ class ChatReadRetrieveReadApproach(Approach):
         else:
             results = [nonewlines(doc[self.content_field]) for doc in r]
         content = "\n".join(results)
-        # print (content)
         # Search -----------------------------------------
         
         # actualizar el historial de la conversación ------------
         messages = self.get_chat_history_as_messages(history)
+        
+        print(history)
+        print(messages)
+        print(ask)
+
         prompt  = [{"role": "system", 
-                        "content": self.system_prompt.format(
+                        "content": self.prompt_content.format(
                                     sources = content[:int(self.max_content)],
                                     ask = ask,
                                     history = messages)
                         }]
-        
-        print(prompt)
-        print(fecha_formateada)
+
 
         # Answer ---------------------------- 
+        start_time = time.time()
         completion = openai.ChatCompletion.create(
                 engine=self.chatgpt_deployment,
                 messages=prompt,
@@ -144,6 +86,24 @@ class ChatReadRetrieveReadApproach(Approach):
                 # max_tokens=256,
             )
         
+        
+        if (self.SYSTEM_PROMPT_ID != 'test'):
+            request_dic = {
+                    'system_prompt_id':self.SYSTEM_PROMPT_ID,
+                    'response':completion.to_dict()['choices'][0]["message"]["content"],
+                    'completion_tokens':completion.to_dict()['usage']['completion_tokens'],
+                    'prompt_tokens':completion.to_dict()['usage']['prompt_tokens'],
+                    'time_stamp':completion.to_dict()['created'],
+                    'model':completion.to_dict()['model'],
+                    'history_len':len(history),
+                    'execution_time':time.time()-start_time,
+                    'prompt_version':self.system_prompt['version_number'],
+                    'knowledge_base_version':self.KNOWLEDGE_BASE_VERSION
+            }
+            firebase_module.insert_request(request_dic)
+            
+
+
         response = completion["choices"][0]["message"]["content"]
         # Answer ---------------------------- 
         return {"data_points": results, 
