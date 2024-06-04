@@ -4,12 +4,13 @@ import time
 import logging
 import openai
 import pymongo
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from dotenv import load_dotenv
 from azure.core.credentials import AzureKeyCredential
 from azure.search.documents import SearchClient
 from approaches.chatreadretrieveread import ChatReadRetrieveReadApproach
 from approaches.chat import get_answer
+from helpers import generate_id
 
 load_dotenv()
 
@@ -48,6 +49,7 @@ chat_approaches = {
 
 
 app = Flask(__name__)
+app.secret_key = 'secret'
 
 
 @app.route("/", defaults={"path": "index.html"})
@@ -61,9 +63,13 @@ def static_file(path):
 def hello():
     return "Hello I´m chatGPT"
 
-
 @app.route("/chat", methods=["POST"])
 def chat():
+    if 'device_id' not in session:
+        session['device_id'] = generate_id()
+
+    print(session.get('device_id'))
+
     try:
         # ------------------------------------------
         # Usa prompt solamente, sin buscar en search

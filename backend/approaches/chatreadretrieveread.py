@@ -7,14 +7,14 @@ from text import nonewlines
 from datetime import datetime
 import firebase_module
 import time
+from helpers import format_datetime
+from flask import session
 
 AZURE_SEARCH_INDEX = os.getenv ("AZURE_SEARCH_INDEX")
 AZURE_OPENAI_MAX_CONTENT = os.getenv ("AZURE_OPENAI_MAX_CONTENT") or 4500
 
-
 fecha_actual = datetime.now()
 fecha_formateada = fecha_actual.strftime("%d/%m/%Y %H:%M:%S")
-
 
 # Simple retrieve-then-read implementation, using the Cognitive Search and OpenAI APIs directly. It first retrieves
 # top documents from search, then constructs a prompt with them, and then uses OpenAI to generate an completion 
@@ -58,13 +58,17 @@ class ChatReadRetrieveReadApproach(Approach):
         else:
             results = [nonewlines(doc[self.content_field]) for doc in r]
         content = "\n".join(results)
+
+        # Convertir cada resultado en una lista para el campo 'content'
+        content_list = [result.split('\n') for result in results]
+        print(content_list)
         # Search -----------------------------------------
         
         # actualizar el historial de la conversación ------------
         messages = self.get_chat_history_as_messages(history)
         
-        print(history)
-        print(messages)
+        # print(history)
+        # print(messages)
         print(ask)
 
         prompt  = [{"role": "system", 
@@ -83,14 +87,20 @@ class ChatReadRetrieveReadApproach(Approach):
                 max_tokens=500,
             )
         
+        # print(completion.to_dict()['created'])
+        # print(format_datetime(completion.to_dict()['created']))
         
         if (self.SYSTEM_PROMPT_ID != 'test'):
             request_dic = {
                     'system_prompt_id':self.SYSTEM_PROMPT_ID,
+                    'query':ask,
                     'response':completion.to_dict()['choices'][0]["message"]["content"],
+                    'search_content':content_list,
+                    'history_content':history,
+                    # 'device_id':session.get('device_id'),
                     'completion_tokens':completion.to_dict()['usage']['completion_tokens'],
                     'prompt_tokens':completion.to_dict()['usage']['prompt_tokens'],
-                    'time_stamp':completion.to_dict()['created'],
+                    'time_stamp':format_datetime(completion.to_dict()['created']),
                     'model':completion.to_dict()['model'],
                     'history_len':len(history),
                     'execution_time':time.time()-start_time,
@@ -99,16 +109,13 @@ class ChatReadRetrieveReadApproach(Approach):
             }
             firebase_module.insert_request(request_dic)
             
-
-
         response = completion["choices"][0]["message"]["content"]
-        print(response)
+        # print(response)
         # Answer ---------------------------- 
         return {"data_points": results, 
                 "answer": response,
                 "thoughts": ""
                 }
-
 
     def get_chat_history_as_messages(self, history):
         history_list = []
