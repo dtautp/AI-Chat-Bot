@@ -11,8 +11,8 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            // "/chat": "https://saltoeusutpback01dev.azurewebsites.net"
-            "/chat": "http://0.0.0.0:5000"
+            "/chat": "https://saltoeusutpback01dev.azurewebsites.net"
+            // "/chat": "http://0.0.0.0:5000"
         }
     }
 });
