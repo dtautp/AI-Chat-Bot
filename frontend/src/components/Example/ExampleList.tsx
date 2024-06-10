@@ -9,11 +9,16 @@ export type ExampleModel = {
 
 const EXAMPLES: ExampleModel[] = [
     {
-        text: "¿Las clases de inglés son obligatorias?",
-        value: "¿Las clases de inglés son obligatorias?"
+        text: "¿Qué actividades debo realizar en la semana 13?",
+        value: "¿Qué actividades debo realizar en la semana 13?"
     },
-    { text: "¿Hasta qué día puedo solicitar mis vacaciones?", value: "¿Hasta qué día puedo solicitar mis vacaciones?" },
-    { text: "¿Me podés dar información del programa de referidos?", value: "¿Me podés dar información del programa de referidos?" }
+    { 
+        text: "¿Cómo se define un activo?", 
+        value: "¿Cómo se define un activo?" },
+    { 
+        text: "Elabora una tabla comparativa entre los conceptos de la semana 8", 
+        value: "Elabora una tabla comparativa entre los conceptos de la semana 8" 
+    }
 ];
 
 interface Props {

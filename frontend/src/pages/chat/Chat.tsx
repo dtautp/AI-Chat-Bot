@@ -140,7 +140,7 @@ const Chat = () => {
                                     ¡Hola! Soy tu Asistente Virtual para el curso de Fundamentos de Contabilidad y Finanzas. <br/> 
                                     En qué puedo ayudarte?
                                 </h2>
-                                {/*<ExampleList onExampleClicked={onExampleClicked} />*/}
+                                <ExampleList onExampleClicked={onExampleClicked} />
                             </div>
                         </div>
                     ) : (
