@@ -20,8 +20,8 @@ const EXAMPLES: ExampleModel[] = [
         img: book
     },
     { 
-        text: "¿Qué debo de considerar pra sacar 20 en mi Tarea - Tarea Académica 2 (TA2)?", 
-        value: "¿Qué debo de considerar pra sacar 20 en mi Tarea - Tarea Académica 2 (TA2)?",
+        text: "¿Qué debo de considerar para sacar 20 en mi Tarea Académica 2 (TA2)?", 
+        value: "¿Qué debo de considerar para sacar 20 en mi Tarea Académica 2 (TA2)?",
         img: filePen
     },
     { 
