@@ -16,8 +16,8 @@ const EXAMPLES: ExampleModel[] = [
         text: "¿Cómo se define un activo?", 
         value: "¿Cómo se define un activo?" },
     { 
-        text: "Elabora una tabla comparativa entre los conceptos de la semana 8", 
-        value: "Elabora una tabla comparativa entre los conceptos de la semana 8" 
+        text: "¿Qué actividades calificadas tiene el curso y en que semanas se desarrollan?", 
+        value: "¿Qué actividades calificadas tiene el curso y en que semanas se desarrollan?" 
     }
 ];
 

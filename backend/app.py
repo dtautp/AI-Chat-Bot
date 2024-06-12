@@ -23,7 +23,7 @@ AZURE_SEARCH_KEY = os.environ.get("AZURE_SEARCH_KEY") or "gptkbindex"
 AZURE_OPENAI_SERVICE = os.getenv("AZURE_OPENAI_SERVICE")  or "myopenai"
 AZURE_OPENAI_CHATGPT_DEPLOYMENT = os.getenv("AZURE_OPENAI_DEPLOYMENT") or "chat"
 AZURE_OPENAI_KEY = os.getenv("AZURE_OPENAI_KEY") or "key"
-KB_FIELDS_CONTENT = os.environ.get("KB_FIELDS_CONTENT") or "content"
+KB_FIELDS_CONTENT = os.environ.get("KB_FIELDS_CONTENT") or "chunk"
 KB_FIELDS_CATEGORY = os.environ.get("KB_FIELDS_CATEGORY") or "category"
 KB_FIELDS_SOURCEPAGE = os.environ.get("KB_FIELDS_SOURCEPAGE") or "sourcepage"
 
