@@ -4,6 +4,8 @@ import { Send28Filled } from "@fluentui/react-icons";
 
 import styles from "./QuestionInput.module.css";
 
+import uploadFiles from '../../img/paperclip.svg';
+
 interface Props {
     onSend: (question: string) => void;
     disabled: boolean;
@@ -43,26 +45,37 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Pr
 
     const sendQuestionDisabled = disabled || !question.trim();
 
+    const UploadFilesClick = () => {
+        alert('Lo siento, aún no contamos con esta función 😔');
+        // Aquí puedes realizar cualquier otra acción que desees al hacer clic en la imagen
+    };
+
     return (
         <Stack horizontal className={styles.questionInputContainer}>
-            <TextField
-                className={styles.questionInputTextArea}
-                placeholder={placeholder}
-                multiline
-                resizable={false}
-                borderless
-                value={question}
-                onChange={onQuestionChange}
-                onKeyDown={onEnterPress}
-            />
+            <div className={styles.chatInputText}>
+                <img src={uploadFiles} alt="Clip Adjuntar Archivo" className={styles.chatUploadFolder} onClick={UploadFilesClick}/>
+                <TextField
+                    className={styles.questionInputTextArea}
+                    placeholder={placeholder}
+                    multiline
+                    resizable={false}
+                    borderless
+                    value={question}
+                    onChange={onQuestionChange}
+                    onKeyDown={onEnterPress}
+                />
+            </div>
+            
             <div className={styles.questionInputButtonsContainer}>
                 <div
                     className={`${styles.questionInputSendButton} ${sendQuestionDisabled ? styles.questionInputSendButtonDisabled : ""}`}
                     aria-label="Ask question button"
                     onClick={sendQuestion}
                 >
-                    <Send28Filled primaryFill="rgba(115, 118, 225, 1)" />
+                    <Send28Filled primaryFill="rgba(255, 255, 255, 1)" />
+                    <p className={styles.questionInputSendButtonText} >Enviar</p>
                 </div>
+                
             </div>
         </Stack>
     );

@@ -3,7 +3,6 @@ import { Checkbox, Panel, DefaultButton, TextField, SpinButton } from "@fluentui
 import { SparkleFilled } from "@fluentui/react-icons";
 
 import styles from "./Chat.module.css";
-import utpImage from '../../img/utp_logo_negro.png';
 
 import { chatApi, Approaches, AskResponse, ChatRequest, ChatTurn } from "../../api";
 import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
@@ -13,6 +12,8 @@ import { UserChatMessage } from "../../components/UserChatMessage";
 import { AnalysisPanel, AnalysisPanelTabs } from "../../components/AnalysisPanel";
 import { SettingsButton } from "../../components/SettingsButton";
 import { ClearChatButton } from "../../components/ClearChatButton";
+
+import logoUTP from "../../img/utp_logo.svg"
 
 const Chat = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
@@ -136,10 +137,18 @@ const Chat = () => {
                     {!lastQuestionRef.current ? (
                         <div className={styles.chatEmptyState}>
                             <div className={styles.chatEmptyState}>
-                                <h2 className={styles.chatEmptyStateSubtitle}>
+                                {/* <h2 className={styles.chatEmptyStateSubtitle}>
                                     ¡Hola! Soy tu Asistente Virtual para el curso de Fundamentos de Contabilidad y Finanzas. <br/> 
                                     En qué puedo ayudarte?
-                                </h2>
+                                </h2> */}
+                                <div className={styles.chatEmptyStateTitle}>
+                                    <p className={styles.chatEmptyStateTitlePrimary}>
+                                        ¡Hola! Soy tu asistente virtual.
+                                    </p>
+                                    <p className={styles.chatEmptyStateTitleSecondary}>
+                                        ¿Cómo te puedo ayudar hoy?
+                                    </p>
+                                </div>
                                 <ExampleList onExampleClicked={onExampleClicked} />
                             </div>
                         </div>
@@ -149,6 +158,9 @@ const Chat = () => {
                                 <div key={index}>
                                     <UserChatMessage message={answer[0]} />
                                     <div className={styles.chatMessageGpt}>
+                                        <div className={styles.chatMessageGptLogoUTP}>
+                                            <img src={logoUTP} alt="" />
+                                        </div>
                                         <Answer
                                             key={index}
                                             answer={answer[1]}
@@ -184,9 +196,6 @@ const Chat = () => {
 
                     <div className={styles.chatInput}>
                         <QuestionInput clearOnSend placeholder="Ingresa tu pregunta aquí" disabled={isLoading} onSend={question => makeApiRequest(question)} />
-                        <div className={styles.chatLogoUTP}>
-                            <img src={utpImage} alt="Logo UTP" />
-                        </div>
                     </div>
                     
                 </div>

@@ -1,10 +1,34 @@
-.container {
+/* .container {
     display: flex;
     align-items: center;
     gap: 6px;
     cursor: pointer;
+    color: #0760F9;
+} */
+
+.container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #0760F9;
+    position: fixed;
+    z-index: 1000;
+    right: 48px;
+    top: 35px;
+    /* padding-right: 48px; */
+    cursor: pointer;
 }
 
-.disabled {
-    opacity: 0.4;
+.container span {
+    color: #0760F9;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px; /* 150% */
 }
+
+
+/* .disabled {
+    opacity: 0.4;
+} */

@@ -4,12 +4,26 @@
     height: 100%;
 }
 
-.header {
-    background-color: #B7E4FF;
+/* .header {
     background-color: #cbdfff;
-    /* color: #121212; */
+    /* color: #121212;
     position: fixed;
     width: 100%;
+    z-index: 1000;
+} */
+
+.header {
+    display: flex;
+    width: 100%;
+    height: 86px;
+    padding: 20px 48px;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+    background: #FFF;
+    /* background-color: #cbdfff; */
+    position: fixed;
     z-index: 1000;
 }
 
@@ -19,6 +33,12 @@
     justify-content: space-around;
     margin-right: 12px;
     margin-left: 12px;
+}
+
+.headerImg {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
 }
 
 .headerTitleContainer {
@@ -33,13 +53,79 @@
     height: 40px;
 }
 
-.headerTitle {
+/* .headerTitle {
     margin-left: 12px;
     color: #121212;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+} */
+
+.headerTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1 0 0;
+}
+
+.headerTitlePrimary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.headerTitlePrimaryText {
+    color: var(--UTP-Black, #081022);
+    font-family: Lato;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 24px; /* 120% */
+    margin: 0;
+}
+
+.headerTitlePrimaryTag {
+    display: flex;
+    padding: 4px 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 100px;
+    background: #E3D8FF;
+}
+
+.headerTitlePrimaryTag p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    color: #422171;
+    text-overflow: ellipsis;
+    font-family: Lato;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 12px; /* 120% */
+    margin: 0;
+}
+
+.headerTitleSecondary {
+    overflow: hidden;
+    color: var(--UTP-Black, #081022);
+    text-overflow: ellipsis;
+    font-family: Lato;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px; /* 171.429% */
+    margin: 0;
+}
+
+.headerClear {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .headerNavList {

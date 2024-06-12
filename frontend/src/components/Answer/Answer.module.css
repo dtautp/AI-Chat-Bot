@@ -1,9 +1,18 @@
-.answerContainer {
+/* .answerContainer {
     padding: 20px;
     background: rgb(249, 249, 249);
     border-radius: 8px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.14), 0px 0px 2px rgba(0, 0, 0, 0.12);
     outline: transparent solid 1px;
+} */
+
+.answerContainer {
+    display: flex;
+    padding: 16px;
+    align-items: center;
+    gap: 8px;
+    border-radius: 12px;
+    background: #FFF;
 }
 
 .answerLogo {
@@ -17,6 +26,14 @@
     padding-top: 16px;
     padding-bottom: 16px;
     /* white-space: pre-line; */
+    padding: 0;
+
+    color: #000F37;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px; /* 171.429% */
 }
 
 .answerText table {
