@@ -30,7 +30,7 @@ class ChatReadRetrieveReadApproach(Approach):
 # Por favor, formula tu respuesta basándote exclusivamente en la información del RAG.
 
     KNOWLEDGE_BASE_VERSION = 'v2'
-    SYSTEM_PROMPT_ID = 2
+    SYSTEM_PROMPT_ID = 3
     system_prompt = firebase_module.select_system_prompt_by_id(SYSTEM_PROMPT_ID)
     prompt_content = system_prompt['prompt_content']
 
@@ -46,8 +46,8 @@ class ChatReadRetrieveReadApproach(Approach):
 
     def run(self, history: list[dict], overrides: dict) -> any:
         use_semantic_captions = True if overrides.get("semantic_captions") else False
-        top = overrides.get("top") or 3
-        # top = 5
+        # top = overrides.get("top") or 3
+        top = 5
         exclude_category = overrides.get("exclude_category") or None
         filter = "category ne '{}'".format(exclude_category.replace("'", "''")) if exclude_category else None
         # Search -----------------------------------------
