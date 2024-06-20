@@ -1,10 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Stack, TextField } from "@fluentui/react";
 import { Send28Filled } from "@fluentui/react-icons";
 
 import styles from "./QuestionInput.module.css";
 
 import uploadFiles from '../../img/paperclip.svg';
+import microphone from '../../img/microphone.svg'
+
+// Define webkitSpeechRecognition for TypeScript
+declare global {
+    interface Window {
+        webkitSpeechRecognition: any;
+    }
+}
+
+// Define types for SpeechRecognition events
+interface SpeechRecognitionEvent {
+    results: SpeechRecognitionResultList;
+    error: string;
+}
 
 interface Props {
     onSend: (question: string) => void;
@@ -15,6 +29,21 @@ interface Props {
 
 export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Props) => {
     const [question, setQuestion] = useState<string>("");
+    const [listening, setListening] = useState<boolean>(false);
+    const [isRecognitionComplete, setIsRecognitionComplete] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (!('webkitSpeechRecognition' in window)) {
+            alert("Tu navegador no soporta el reconocimiento de voz. Prueba con Google Chrome.");
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isRecognitionComplete) {
+            sendQuestion();
+            setIsRecognitionComplete(false);
+        }
+    }, [isRecognitionComplete]);
 
     const sendQuestion = () => {
         if (disabled || !question.trim()) {
@@ -50,6 +79,41 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Pr
         // Aquí puedes realizar cualquier otra acción que desees al hacer clic en la imagen
     };
 
+    const ActivateMicro = () => {
+
+        if (!('webkitSpeechRecognition' in window)) {
+            alert("Tu navegador no soporta el reconocimiento de voz. Prueba con Google Chrome.");
+            return;
+        }
+
+        const reconocimiento = new window.webkitSpeechRecognition();
+        reconocimiento.lang = "es-ES"; // Configurar el idioma a español
+        reconocimiento.continuous = false;
+        reconocimiento.interimResults = false;
+
+        reconocimiento.onstart = function() {
+            setListening(true);
+        };
+
+        reconocimiento.onresult = function(event: SpeechRecognitionEvent) {
+            const resultado = event.results[0][0].transcript;
+            setQuestion(resultado);
+            setListening(false);
+            setIsRecognitionComplete(true); // Set recognition complete flag to true
+        };
+
+        reconocimiento.onerror = function(event: SpeechRecognitionEvent) {
+            alert("Error: " + event.error);
+            setListening(false);
+        };
+
+        reconocimiento.onend = function() {
+            setListening(false);
+        };
+
+        reconocimiento.start();
+    };
+
     return (
         <Stack horizontal className={styles.questionInputContainer}>
             <div className={styles.chatInputText}>
@@ -64,6 +128,13 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Pr
                     onChange={onQuestionChange}
                     onKeyDown={onEnterPress}
                 />
+                <img
+                    src={microphone}
+                    alt="Activar micrófono"
+                    className={`${styles.chatMicrophone} ${listening ? styles.chatMicrophoneDisabled : ""}`}
+                    onClick={!listening ? ActivateMicro : undefined}
+                />
+                {/* <button onClick={ActivateMicro} disabled={listening}>Micrófono</button> */}
             </div>
             
             <div className={styles.questionInputButtonsContainer}>
